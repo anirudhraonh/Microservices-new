@@ -19,8 +19,8 @@ public class InventoryController {
         return "Inventory added successfully";
     }
 
-    @GetMapping("/{skuCode}")
-    public Boolean isInStock(@PathVariable String skuCode, @RequestParam Long quantity) {
+    @GetMapping
+    public Boolean isInStock(@RequestParam String skuCode, @RequestParam Long quantity) {
         return inventoryService.isInStock(skuCode, quantity);
     }
 }

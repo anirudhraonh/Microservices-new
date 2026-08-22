@@ -24,8 +24,6 @@ public class InventoryService {
     }
 
     public Boolean isInStock(String skuCode, Long quantity) {
-        return inventoryRepository.findBySkuCode(skuCode)
-                .map(inventory -> inventory.getQuantity() >= quantity)
-                .orElse(false);
+        return inventoryRepository.existsBySkuCodeAndQuantityGreaterThanEqual(skuCode, quantity);
     }
 }
