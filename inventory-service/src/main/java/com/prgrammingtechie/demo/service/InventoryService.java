@@ -26,4 +26,23 @@ public class InventoryService {
     public Boolean isInStock(String skuCode, Long quantity) {
         return inventoryRepository.existsBySkuCodeAndQuantityGreaterThanEqual(skuCode, quantity);
     }
+
+    public String updateInventory(String skuCode, Long quantity) {
+        var inventoryItem = inventoryRepository.findBySkuCode(skuCode);
+
+        if (inventoryItem.isEmpty()) {
+            return "Inventory item not found for SKU: " + skuCode;
+        }
+
+        InventoryItem item = inventoryItem.get();
+        if (item.getQuantity() < quantity) {
+            return "Insufficient inventory for SKU: " + skuCode;
+        }
+
+        item.setQuantity(item.getQuantity() - quantity);
+        inventoryRepository.save(item);
+        log.info("Inventory updated for SKU: {}. New quantity: {}", skuCode, item.getQuantity());
+        return "Inventory updated for SKU: " + skuCode + ". New quantity: " + item.getQuantity();
+    }
+
 }
